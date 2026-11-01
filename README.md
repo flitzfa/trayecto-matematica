@@ -4,6 +4,16 @@ Aplicación web personal para seguir el **Profesorado de Matemática** de la Esc
 
 No es un maquetado ni una landing page: todos los datos se guardan en el navegador y la app funciona sin conexión ni instalación.
 
+## Versión online
+
+La app está publicada gratis en GitHub Pages:
+
+**https://flitzfa.github.io/trayecto-matematica/**
+
+Ese es el enlace para compartir con Josef. Se puede abrir desde cualquier navegador, en computadora o celular, y también agregar a la pantalla de inicio como si fuera una app.
+
+> La dirección es estable y el sitio queda publicado mientras exista el repositorio. Los datos académicos no viajan al servidor: se guardan en el navegador de cada dispositivo.
+
 ## Cómo abrirla
 
 1. Abrí `index.html` con doble clic (Chrome, Edge o Firefox).
@@ -17,7 +27,7 @@ python -m http.server 8000
 
 y entrar a `http://localhost:8000`.
 
-> Los datos se guardan en `localStorage` bajo la clave `trayecto.academico.v1`. El almacenamiento está asociado al navegador y al origen desde el que se abre la app. Si abrís el archivo desde otra ruta, otro navegador o un servidor local distinto, vas a ver un estado vacío: usá **Ajustes → Descargar copia de seguridad** antes de cambiar de entorno.
+> Los datos se guardan en `localStorage` bajo la clave `trayecto.academico.v1`. El almacenamiento está asociado al navegador y al origen desde el que se abre la app. La versión online y el archivo local no comparten datos, y tampoco se sincronizan automáticamente entre el celular y la computadora. Si abrís el archivo desde otra ruta, otro navegador o un servidor local distinto, vas a ver un estado vacío: usá **Ajustes → Descargar copia de seguridad** antes de cambiar de entorno.
 
 ## Qué incluye
 

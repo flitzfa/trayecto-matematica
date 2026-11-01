@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#173f38">
+  <meta name="description" content="Trayecto: seguimiento académico personal del Profesorado de Matemática.">
+  <title>Trayecto · Profesorado de Matemática</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#mainContent">Saltar al contenido</a>
+
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Navegación principal">
+      <div class="sidebar-top">
+        <a class="brand" href="#/panel" aria-label="Trayecto, ir al panel">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none">
+              <path d="M4.5 22.5c5.2 0 5.4-13 11.4-13s6.3 13 11.6 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              <circle cx="4.5" cy="22.5" r="2.2" fill="#ec775d"/>
+              <circle cx="15.9" cy="9.5" r="2.2" fill="#f7f1e3"/>
+              <circle cx="27.5" cy="22.5" r="2.2" fill="#ec775d"/>
+            </svg>
+          </span>
+          <span class="brand-copy">
+            <span class="brand-name">Trayecto</span>
+            <span class="brand-tag">Seguimiento académico</span>
+          </span>
+        </a>
+        <button class="icon-button sidebar-close" id="sidebarClose" type="button" aria-label="Cerrar menú">
+          <svg class="icon" aria-hidden="true"><use href="#icon-close"></use></svg>
+        </button>
+      </div>
+
+      <div class="sidebar-career">
+        <span class="career-kicker">Carrera</span>
+        <p>Profesorado de Matemática</p>
+        <span class="career-meta">Escuela Normal Superior N°32</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <span class="nav-label">Tu carrera</span>
+        <a class="nav-item" href="#/panel" data-route="panel">
+          <svg class="icon" aria-hidden="true"><use href="#icon-panel"></use></svg>
+          <span>Panel</span>
+        </a>
+        <a class="nav-item" href="#/plan" data-route="plan">
+          <svg class="icon" aria-hidden="true"><use href="#icon-book"></use></svg>
+          <span>Plan de estudios</span>
+          <span class="nav-count" id="navSubjectCount">40</span>
+        </a>
+        <a class="nav-item" href="#/calendario" data-route="calendario">
+          <svg class="icon" aria-hidden="true"><use href="#icon-calendar"></use></svg>
+          <span>Calendario</span>
+          <span class="nav-count nav-count--accent" id="navEventCount" hidden>0</span>
+        </a>
+        <a class="nav-item" href="#/bitacora" data-route="bitacora">
+          <svg class="icon" aria-hidden="true"><use href="#icon-note"></use></svg>
+          <span>Observaciones</span>
+        </a>
+
+        <span class="nav-label nav-label--spaced">Tu espacio</span>
+        <a class="nav-item" href="#/ajustes" data-route="ajustes">
+          <svg class="icon" aria-hidden="true"><use href="#icon-settings"></use></svg>
+          <span>Ajustes</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="sidebar-progress">
+          <div class="mini-ring" id="sidebarRing" aria-hidden="true">
+            <svg viewBox="0 0 44 44">
+              <circle class="mini-ring-track" cx="22" cy="22" r="18"></circle>
+              <circle class="mini-ring-value" cx="22" cy="22" r="18"></circle>
+            </svg>
+            <span id="sidebarPercent">0%</span>
+          </div>
+          <div class="sidebar-progress-copy">
+            <strong id="sidebarApproved">0 de 40</strong>
+            <span>materias aprobadas</span>
+          </div>
+        </div>
+        <a class="profile-chip" href="#/ajustes" aria-label="Editar perfil">
+          <span class="avatar" id="sidebarAvatar">E</span>
+          <span class="profile-chip-copy">
+            <strong id="sidebarName">Estudiante</strong>
+            <span>Ver perfil</span>
+          </span>
+          <svg class="icon icon--small" aria-hidden="true"><use href="#icon-chevron-right"></use></svg>
+        </a>
+      </div>
+    </aside>
+
+    <button class="sidebar-overlay" id="sidebarOverlay" type="button" aria-label="Cerrar menú" tabindex="-1"></button>
+
+    <div class="main-column">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="icon-button menu-button" id="menuButton" type="button" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false">
+            <svg class="icon" aria-hidden="true"><use href="#icon-menu"></use></svg>
+          </button>
+          <div class="page-heading">
+            <span class="page-eyebrow" id="pageEyebrow">Resumen</span>
+            <h1 id="pageTitle">Panel académico</h1>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <span class="today-label" id="todayLabel"></span>
+          <button class="button button--primary button--compact" type="button" data-action="new-event">
+            <svg class="icon icon--small" aria-hidden="true"><use href="#icon-plus"></use></svg>
+            <span>Nuevo evento</span>
+          </button>
+          <button class="avatar-button" type="button" data-action="go-settings" aria-label="Abrir ajustes">
+            <span class="avatar" id="topbarAvatar">E</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="content" id="mainContent">
+        <section class="page" id="page-panel" data-page="panel" aria-labelledby="pageTitle"></section>
+        <section class="page" id="page-plan" data-page="plan" aria-labelledby="pageTitle"></section>
+        <section class="page" id="page-calendario" data-page="calendario" aria-labelledby="pageTitle"></section>
+        <section class="page" id="page-bitacora" data-page="bitacora" aria-labelledby="pageTitle"></section>
+        <section class="page" id="page-ajustes" data-page="ajustes" aria-labelledby="pageTitle"></section>
+      </main>
+
+      <footer class="app-footer">
+        <p>Trayecto · seguimiento personal del Profesorado de Matemática</p>
+        <button class="text-button" type="button" data-action="open-plan-info">Sobre el plan de estudios</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Subject detail / editor -->
+  <dialog class="modal modal--wide" id="subjectDialog" aria-labelledby="subjectDialogTitle">
+    <form class="modal-form" id="subjectForm" novalidate>
+      <header class="modal-header">
+        <div>
+          <span class="modal-kicker" id="subjectDialogKicker">Espacio curricular</span>
+          <h2 class="modal-title" id="subjectDialogTitle">Detalle de la materia</h2>
+        </div>
+        <button class="icon-button" type="button" data-close-dialog="subjectDialog" aria-label="Cerrar">
+          <svg class="icon" aria-hidden="true"><use href="#icon-close"></use></svg>
+        </button>
+      </header>
+
+      <div class="modal-body">
+        <input type="hidden" id="subjectId" name="subjectId">
+        <input type="hidden" id="subjectMode" name="subjectMode" value="edit">
+
+        <div class="field">
+          <label for="subjectName">Nombre del espacio curricular</label>
+          <input class="input" id="subjectName" name="name" type="text" autocomplete="off" required maxlength="120">
+        </div>
+
+        <fieldset class="field status-fieldset">
+          <legend>Estado</legend>
+          <div class="status-picker" id="subjectStatusPicker">
+            <label class="status-option" data-status-option="pendiente">
+              <input type="radio" name="status" value="pendiente">
+              <span class="status-option-dot status-dot--pendiente" aria-hidden="true"></span>
+              <span>Pendiente</span>
+            </label>
+            <label class="status-option" data-status-option="cursando">
+              <input type="radio" name="status" value="cursando">
+              <span class="status-option-dot status-dot--cursando" aria-hidden="true"></span>
+              <span>Cursando</span>
+            </label>
+            <label class="status-option" data-status-option="regular">
+              <input type="radio" name="status" value="regular">
+              <span class="status-option-dot status-dot--regular" aria-hidden="true"></span>
+              <span>Regular</span>
+            </label>
+            <label class="status-option" data-status-option="aprobada">
+              <input type="radio" name="status" value="aprobada">
+              <span class="status-option-dot status-dot--aprobada" aria-hidden="true"></span>
+              <span>Aprobada</span>
+            </label>
+          </div>
+          <p class="field-hint">“Regular” significa cursada aprobada con final pendiente.</p>
+        </fieldset>
+
+        <div class="form-grid form-grid--3">
+          <div class="field">
+            <label for="subjectYear">Año</label>
+            <select class="input select" id="subjectYear" name="year">
+              <option value="1">1.er año</option>
+              <option value="2">2.º año</option>
+              <option value="3">3.er año</option>
+              <option value="4">4.º año</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="subjectType">Tipo</label>
+            <select class="input select" id="subjectType" name="code">
+              <option value="M">Materia</option>
+              <option value="T">Taller</option>
+              <option value="S">Seminario</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="subjectPeriod">Período</label>
+            <select class="input select" id="subjectPeriod" name="period">
+              <option value="">Sin especificar</option>
+              <option value="1c">1.er cuatrimestre</option>
+              <option value="2c">2.º cuatrimestre</option>
+              <option value="anual">Anual</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid form-grid--3">
+          <div class="field">
+            <label for="subjectGrade">Nota final <span class="label-optional">(opcional)</span></label>
+            <input class="input" id="subjectGrade" name="grade" type="number" min="1" max="10" step="0.01" inputmode="decimal" placeholder="—">
+          </div>
+          <div class="field" data-date-for="cursando regular">
+            <label for="subjectCursadaDate">Fecha de cursada</label>
+            <input class="input" id="subjectCursadaDate" name="cursadaDate" type="date">
+          </div>
+          <div class="field" data-date-for="aprobada">
+            <label for="subjectApprovedDate">Fecha de aprobación</label>
+            <input class="input" id="subjectApprovedDate" name="approvedDate" type="date">
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="label-row">
+            <label for="subjectNotes">Observaciones personales</label>
+            <span class="field-hint">Solo visibles para vos</span>
+          </div>
+          <textarea class="input textarea" id="subjectNotes" name="notes" rows="4" maxlength="2000" placeholder="Anotá materiales, dudas, fechas de consulta, acuerdos con la cátedra…"></textarea>
+        </div>
+
+        <section class="correlations-card" aria-labelledby="correlationsTitle">
+          <div class="section-title-row">
+            <div>
+              <span class="section-kicker">Plan oficial</span>
+              <h3 id="correlationsTitle">Correlatividades</h3>
+            </div>
+            <span class="correlation-summary" id="subjectCorrelationSummary"></span>
+          </div>
+          <div class="correlation-grid" id="subjectCorrelations"></div>
+        </section>
+
+        <details class="advanced-panel" id="subjectAdvanced">
+          <summary>
+            <span>Editar correlatividades</span>
+            <svg class="icon icon--small" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
+          </summary>
+          <div class="advanced-body">
+            <p class="field-hint">Modificá las materias que el plan exige para cursar o rendir final. Las correlatividades se guardan junto con esta materia.</p>
+            <div class="correlation-tabs" id="correlationTabs" role="tablist" aria-label="Tipo de correlatividad"></div>
+            <div id="correlationEditor"></div>
+          </div>
+        </details>
+
+        <div class="subject-events" id="subjectEvents"></div>
+      </div>
+
+      <footer class="modal-footer">
+        <button class="button button--ghost button--danger" type="button" id="deleteSubjectButton">
+          <svg class="icon icon--small" aria-hidden="true"><use href="#icon-trash"></use></svg>
+          <span>Eliminar</span>
+        </button>
+        <div class="modal-footer-actions">
+          <button class="button button--secondary" type="button" data-close-dialog="subjectDialog">Cancelar</button>
+          <button class="button button--primary" type="submit">Guardar cambios</button>
+        </div>
+      </footer>
+    </form>
+  </dialog>
+
+  <!-- Event editor -->
+  <dialog class="modal" id="eventDialog" aria-labelledby="eventDialogTitle">
+    <form class="modal-form" id="eventForm" novalidate>
+      <header class="modal-header">
+        <div>
+          <span class="modal-kicker" id="eventDialogKicker">Calendario académico</span>
+          <h2 class="modal-title" id="eventDialogTitle">Nuevo evento</h2>
+        </div>
+        <button class="icon-button" type="button" data-close-dialog="eventDialog" aria-label="Cerrar">
+          <svg class="icon" aria-hidden="true"><use href="#icon-close"></use></svg>
+        </button>
+      </header>
+
+      <div class="modal-body">
+        <input type="hidden" id="eventId" name="eventId">
+        <input type="hidden" id="eventMode" name="eventMode" value="create">
+
+        <div class="form-grid form-grid--2">
+          <div class="field">
+            <label for="eventType">Tipo</label>
+            <select class="input select" id="eventType" name="type">
+              <option value="Parcial">Parcial</option>
+              <option value="Final">Final</option>
+              <option value="Trabajo práctico">Trabajo práctico</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="eventSubject">Materia <span class="label-optional">(opcional)</span></label>
+            <select class="input select" id="eventSubject" name="subjectId">
+              <option value="">Sin materia</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="eventTitle">Título</label>
+          <input class="input" id="eventTitle" name="title" type="text" maxlength="100" required placeholder="Ej. Parcial de Cálculo 2">
+        </div>
+
+        <div class="form-grid form-grid--2">
+          <div class="field">
+            <label for="eventDate">Fecha</label>
+            <input class="input" id="eventDate" name="date" type="date" required>
+          </div>
+          <div class="field">
+            <label for="eventTime">Hora <span class="label-optional">(opcional)</span></label>
+            <input class="input" id="eventTime" name="time" type="time">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="eventNotes">Notas <span class="label-optional">(opcional)</span></label>
+          <textarea class="input textarea" id="eventNotes" name="notes" rows="3" maxlength="1000" placeholder="Aula, temario, materiales…"></textarea>
+        </div>
+
+        <label class="check-row" id="eventDoneRow">
+          <input type="checkbox" id="eventDone" name="done">
+          <span class="check-box" aria-hidden="true"></span>
+          <span>Ya lo rendí / entregué</span>
+        </label>
+      </div>
+
+      <footer class="modal-footer">
+        <button class="button button--ghost button--danger" type="button" id="deleteEventButton">
+          <svg class="icon icon--small" aria-hidden="true"><use href="#icon-trash"></use></svg>
+          <span>Eliminar</span>
+        </button>
+        <div class="modal-footer-actions">
+          <button class="button button--secondary" type="button" data-close-dialog="eventDialog">Cancelar</button>
+          <button class="button button--primary" type="submit">Guardar evento</button>
+        </div>
+      </footer>
+    </form>
+  </dialog>
+
+  <!-- Plan information -->
+  <dialog class="modal modal--medium" id="planInfoDialog" aria-labelledby="planInfoTitle">
+    <header class="modal-header">
+      <div>
+        <span class="modal-kicker">Documento fuente</span>
+        <h2 class="modal-title" id="planInfoTitle">Sobre el plan de estudios</h2>
+      </div>
+      <button class="icon-button" type="button" data-close-dialog="planInfoDialog" aria-label="Cerrar">
+        <svg class="icon" aria-hidden="true"><use href="#icon-close"></use></svg>
+      </button>
+    </header>
+    <div class="modal-body" id="planInfoBody"></div>
+    <footer class="modal-footer">
+      <span class="modal-footer-note">Los datos faltantes quedan editables.</span>
+      <div class="modal-footer-actions">
+        <button class="button button--primary" type="button" data-close-dialog="planInfoDialog">Entendido</button>
+      </div>
+    </footer>
+  </dialog>
+
+  <!-- Confirmation -->
+  <dialog class="modal modal--small" id="confirmDialog" aria-labelledby="confirmTitle">
+    <div class="modal-header">
+      <div>
+        <span class="modal-kicker" id="confirmKicker">Confirmar acción</span>
+        <h2 class="modal-title" id="confirmTitle">¿Estás seguro?</h2>
+      </div>
+      <button class="icon-button" type="button" data-confirm-cancel aria-label="Cerrar">
+        <svg class="icon" aria-hidden="true"><use href="#icon-close"></use></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p class="confirm-message" id="confirmMessage"></p>
+    </div>
+    <footer class="modal-footer">
+      <div class="modal-footer-actions">
+        <button class="button button--secondary" type="button" data-confirm-cancel>Cancelar</button>
+        <button class="button button--primary" type="button" id="confirmAccept">Confirmar</button>
+      </div>
+    </footer>
+  </dialog>
+
+  <input type="file" id="importFileInput" accept="application/json,.json" hidden>
+
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="false"></div>
+
+  <!-- Icon sprite -->
+  <svg class="svg-sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="icon-panel" viewBox="0 0 24 24">
+      <path d="M4 4h6v7H4zM14 4h6v4h-6zM14 12h6v8h-6zM4 15h6v5H4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-book" viewBox="0 0 24 24">
+      <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v17H6.5A2.5 2.5 0 0 0 4 22V5.5ZM20 5.5A2.5 2.5 0 0 0 17.5 3H13v17h4.5A2.5 2.5 0 0 1 20 22V5.5Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-calendar" viewBox="0 0 24 24">
+      <rect x="3.5" y="5" width="17" height="15.5" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <path d="M3.5 9.5h17M8 3v4M16 3v4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      <circle cx="8" cy="13.5" r="1" fill="currentColor"/>
+      <circle cx="12" cy="13.5" r="1" fill="currentColor"/>
+      <circle cx="16" cy="13.5" r="1" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-note" viewBox="0 0 24 24">
+      <path d="M6 3.5h9l4 4V20a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M15 3.5V8h4M8.5 12h7M8.5 16h5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-settings" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <path d="M19.4 15a1.5 1.5 0 0 0 .3 1.7l.1.1-1.9 1.9-.1-.1a1.5 1.5 0 0 0-1.7-.3 1.5 1.5 0 0 0-.9 1.4V20h-2.7v-.3a1.5 1.5 0 0 0-.9-1.4 1.5 1.5 0 0 0-1.7.3l-.1.1-1.9-1.9.1-.1A1.5 1.5 0 0 0 8 15a1.5 1.5 0 0 0-1.4-.9H6v-2.7h.6A1.5 1.5 0 0 0 8 10a1.5 1.5 0 0 0-.3-1.7l-.1-.1 1.9-1.9.1.1a1.5 1.5 0 0 0 1.7.3A1.5 1.5 0 0 0 12.2 5v-.5h2.7V5a1.5 1.5 0 0 0 .9 1.4 1.5 1.5 0 0 0 1.7-.3l.1-.1 1.9 1.9-.1.1a1.5 1.5 0 0 0-.3 1.7 1.5 1.5 0 0 0 1.4.9h.5v2.7h-.5a1.5 1.5 0 0 0-1.4.9Z" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-plus" viewBox="0 0 24 24">
+      <path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-arrow-right" viewBox="0 0 24 24">
+      <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-chevron-right" viewBox="0 0 24 24">
+      <path d="m9 6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-chevron-left" viewBox="0 0 24 24">
+      <path d="m15 6-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-chevron-down" viewBox="0 0 24 24">
+      <path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-search" viewBox="0 0 24 24">
+      <circle cx="10.8" cy="10.8" r="6.3" fill="none" stroke="currentColor" stroke-width="1.7"/>
+      <path d="m16 16 4 4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-close" viewBox="0 0 24 24">
+      <path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-menu" viewBox="0 0 24 24">
+      <path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24">
+      <path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-clock" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <path d="M12 7v5.3l3.4 2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-alert" viewBox="0 0 24 24">
+      <path d="M12 3.5 21 20H3L12 3.5Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M12 9v5M12 17.2v.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-download" viewBox="0 0 24 24">
+      <path d="M12 3v12M7 10l5 5 5-5M4 20h16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-upload" viewBox="0 0 24 24">
+      <path d="M12 16V4M7 9l5-5 5 5M4 20h16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-trash" viewBox="0 0 24 24">
+      <path d="M4 7h16M9 7V4h6v3M6.5 7l.8 13h9.4l.8-13M10 11v5M14 11v5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-info" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <path d="M12 11v5M12 8v.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-spark" viewBox="0 0 24 24">
+      <path d="M12 2.5c.6 5.7 3.8 8.9 9.5 9.5-5.7.6-8.9 3.8-9.5 9.5-.6-5.7-3.8-8.9-9.5-9.5 5.7-.6 8.9-3.8 9.5-9.5Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-dots" viewBox="0 0 24 24">
+      <circle cx="5" cy="12" r="1.4" fill="currentColor"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><circle cx="19" cy="12" r="1.4" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-graduation" viewBox="0 0 24 24">
+      <path d="m2.5 9 9.5-5 9.5 5-9.5 5-9.5-5Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M6.5 11.2v4.3c0 1.4 2.5 2.8 5.5 2.8s5.5-1.4 5.5-2.8v-4.3M21.5 9v5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-filter" viewBox="0 0 24 24">
+      <path d="M4 6h16M7 12h10M10 18h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-edit" viewBox="0 0 24 24">
+      <path d="m4 20 4.2-1 10.6-10.6a2 2 0 0 0 0-2.8l-.4-.4a2 2 0 0 0-2.8 0L5 15.8 4 20Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="m14.5 6.5 3 3" fill="none" stroke="currentColor" stroke-width="1.6"/>
+    </symbol>
+    <symbol id="icon-bookmark" viewBox="0 0 24 24">
+      <path d="M6 3.5h12v17L12 16l-6 4.5v-17Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-refresh" viewBox="0 0 24 24">
+      <path d="M20 6v5h-5M4 18v-5h5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M18.2 15.2A7.5 7.5 0 0 1 5.5 8M5.8 8.8A7.5 7.5 0 0 1 18.5 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+    </symbol>
+  </svg>
+
+  <script src="assets/js/plan-data.js"></script>
+  <script src="assets/js/app-core.js"></script>
+  <script src="assets/js/app-state.js"></script>
+  <script src="assets/js/app-ui.js"></script>
+  <script src="assets/js/app-render.js"></script>
+  <script src="assets/js/app-plan.js"></script>
+  <script src="assets/js/app-calendar.js"></script>
+  <script src="assets/js/app-notes.js"></script>
+  <script src="assets/js/app-settings.js"></script>
+  <script src="assets/js/app-subject-dialog.js"></script>
+  <script src="assets/js/app-event-dialog.js"></script>
+  <script src="assets/js/app-actions.js"></script>
+</body>
+</html>

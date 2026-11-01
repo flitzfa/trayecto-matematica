@@ -10,7 +10,9 @@ La app está publicada gratis en GitHub Pages:
 
 **https://flitzfa.github.io/trayecto-matematica/**
 
-Ese es el enlace para compartir con Josef. Se puede abrir desde cualquier navegador, en computadora o celular, y también agregar a la pantalla de inicio como si fuera una app.
+<img src="qr-trayecto.png" alt="Código QR para abrir Trayecto" width="220">
+
+Ese es el enlace para compartir con Josef. Se puede abrir desde cualquier navegador, en computadora o celular, y también agregar a la pantalla de inicio como si fuera una app. El QR sirve para abrirla directamente desde el teléfono.
 
 > La dirección es estable y el sitio queda publicado mientras exista el repositorio. Los datos académicos no viajan al servidor: se guardan en el navegador de cada dispositivo.
 

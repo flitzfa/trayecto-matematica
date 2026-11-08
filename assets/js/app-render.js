@@ -142,6 +142,15 @@
       '<span class="hero-legend-item"><span class="hero-legend-dot" style="background:rgba(248,242,228,.35)"></span><strong>' +
       stats.pending +
       "</strong> pendientes</span>" +
+      (stats.average !== null
+        ? '<span class="hero-legend-item" title="Sobre ' +
+          stats.graded +
+          " " +
+          App.plural(stats.graded, "materia aprobada con nota", "materias aprobadas con nota") +
+          '">Promedio <strong>' +
+          App.formatGrade(stats.average) +
+          "</strong></span>"
+        : "") +
       "</div>" +
       "</div>" +
       "</div>" +

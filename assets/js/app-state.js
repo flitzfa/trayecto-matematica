@@ -267,7 +267,14 @@
     var regular = 0;
     var cursando = 0;
     var pending = 0;
+    var gradeSum = 0;
+    var graded = 0;
     subjects.forEach(function (subject) {
+      var grade = subject.grade === "" ? NaN : Number(subject.grade);
+      if (subject.status === "aprobada" && !isNaN(grade)) {
+        gradeSum += grade;
+        graded += 1;
+      }
       if (subject.status === "aprobada") approved += 1;
       else if (subject.status === "regular") regular += 1;
       else if (subject.status === "cursando") cursando += 1;
@@ -281,6 +288,8 @@
       cursando: cursando,
       active: regular + cursando,
       pending: pending,
+      graded: graded,
+      average: graded ? Math.round((gradeSum / graded) * 100) / 100 : null,
       percent: total ? Math.round((approved / total) * 100) : 0
     };
   };

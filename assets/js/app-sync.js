@@ -113,7 +113,8 @@
   }
 
   function entityTime(entity) {
-    return entity && (entity.updatedAt || entity.createdAt || "");
+    // Solo cuenta la última edición real: la fecha de creación no gana conflictos.
+    return (entity && entity.updatedAt) || "";
   }
 
   function mergeTombstones(localDeleted, remoteDeleted) {
@@ -354,35 +355,39 @@
       sync.revision = Number(remote.revision || 0);
       sync.lastSyncedAt = remote.updatedAt || "";
 
-      var localTime = App.state.updatedAt || "";
-      var remoteTime = remote.updatedAt || "";
-      var localHasData = hasLocalData();
-
-      if (!localHasData) {
+      if (!hasLocalData()) {
         applyRemoteState(remote.state, remote.revision, remote.updatedAt);
         if (!options.silent) App.toast("Datos cargados", "Ya tenés tu seguimiento en este dispositivo.");
         return;
       }
 
-      if (
-        !options.force &&
-        Number(remote.revision || 0) === previousRevision &&
-        payloadSignature(App.state) === payloadSignature(remote.state)
-      ) {
+      var localSignature = payloadSignature(App.state);
+      var remoteSignature = payloadSignature(remote.state);
+
+      if (!options.force && Number(remote.revision || 0) === previousRevision && localSignature === remoteSignature) {
         setStatus("synced");
         return;
       }
 
-      if (localTime > remoteTime) {
-        var merged = mergeStates(App.state, remote.state);
-        applyLocalState(merged);
-        await pushState({ baseRevision: sync.revision });
-        if (!options.silent) App.toast("Datos sincronizados", "Se combinaron los cambios de este dispositivo.");
-      } else {
+      // Siempre se combinan ambos lados: nunca se descarta lo que existe
+      // solo en este dispositivo aunque el servidor tenga algo más nuevo.
+      var merged = mergeStates(App.state, remote.state);
+      var mergedSignature = payloadSignature(merged);
+
+      if (mergedSignature === remoteSignature) {
         applyRemoteState(remote.state, remote.revision, remote.updatedAt);
         if (!options.silent && options.announce) {
           App.toast("Datos actualizados", "Se cargaron los cambios de tu cuenta.");
         }
+        return;
+      }
+
+      if (mergedSignature !== localSignature) {
+        applyLocalState(merged);
+      }
+      await pushState({ baseRevision: sync.revision });
+      if (!options.silent) {
+        App.toast("Datos sincronizados", "Se combinaron los cambios de tus dispositivos.");
       }
       setStatus("synced");
     } catch (error) {

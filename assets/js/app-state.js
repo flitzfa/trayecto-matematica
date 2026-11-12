@@ -68,7 +68,8 @@
       subjects: App.PLAN.subjects.map(function (official) {
         var subject = App.createSubjectFromOfficial(official);
         subject.createdAt = now;
-        subject.updatedAt = now;
+        // Sin ediciones todavía: no debe ganarle a datos de otros dispositivos.
+        subject.updatedAt = "";
         return subject;
       }),
       events: [],
@@ -165,7 +166,8 @@
         official: !!raw.official,
         correlations: App.cloneCorrelations(raw.correlations),
         createdAt: raw.createdAt || now,
-        updatedAt: raw.updatedAt || now
+        // Sin edición registrada: no debe pisar datos de otros dispositivos.
+        updatedAt: raw.updatedAt || ""
       };
     });
 

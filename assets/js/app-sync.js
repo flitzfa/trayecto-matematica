@@ -20,6 +20,7 @@
     status: "signed-out",
     busy: false,
     timer: null,
+    retryTimer: null,
     pollTimer: null,
     applying: false,
     mode: "login",
@@ -266,6 +267,10 @@
     sync.session = null;
     sync.revision = 0;
     sync.lastSyncedAt = "";
+    if (sync.retryTimer) {
+      window.clearTimeout(sync.retryTimer);
+      sync.retryTimer = null;
+    }
     sessionStore(null);
     setStatus("signed-out");
     App.toast("Sesión vencida", "Volvé a entrar para seguir sincronizando.", "error");
@@ -286,6 +291,10 @@
     });
     sync.revision = Number(response.revision || 0);
     sync.lastSyncedAt = response.updatedAt || "";
+    if (sync.retryTimer) {
+      window.clearTimeout(sync.retryTimer);
+      sync.retryTimer = null;
+    }
     setStatus("synced");
     return true;
   }
@@ -317,7 +326,7 @@
     }
     if (sync.busy) return;
     sync.busy = true;
-    setStatus("syncing");
+    if (!options.silent) setStatus("syncing");
     try {
       if (options.pushOnly) {
         await pushState({ baseRevision: sync.revision });
@@ -327,8 +336,17 @@
       var remote = await request("/api/sync", { token: sync.session.token });
       if (!remote.state) {
         sync.revision = 0;
-        await pushState({ baseRevision: 0 });
-        if (!options.silent) App.toast("Cuenta conectada", "Tus datos ya están guardados en la nube.");
+        sync.lastSyncedAt = "";
+        if (hasLocalData()) {
+          await pushState({ baseRevision: 0 });
+          if (!options.silent) App.toast("Cuenta conectada", "Tus datos ya están guardados en la nube.");
+        } else if (!options.silent) {
+          App.toast(
+            "Cuenta conectada",
+            "Cuando agregues materias, fechas o notas, se van a guardar en tu cuenta."
+          );
+        }
+        setStatus("synced");
         return;
       }
 
@@ -377,11 +395,21 @@
         if (!options.silent) {
           App.toast("No se pudo sincronizar", error.message || "Revisá tu conexión.", "error");
         }
+        scheduleRetry();
       }
     } finally {
       sync.busy = false;
     }
   };
+
+  function scheduleRetry() {
+    if (!sync.session || sync.retryTimer) return;
+    sync.retryTimer = window.setTimeout(function () {
+      sync.retryTimer = null;
+      if (!sync.session) return;
+      sync.now({ silent: true, announce: false });
+    }, 8000);
+  }
 
   sync.schedulePush = function () {
     if (!sync.session || sync.applying) return;
@@ -571,6 +599,8 @@
       sync.session = null;
       sync.revision = 0;
       sync.lastSyncedAt = "";
+      window.clearTimeout(sync.retryTimer);
+      sync.retryTimer = null;
       setStatus("signed-out");
       App.closeDialog(App.$("#syncDialog"));
       App.toast("Sesión cerrada", "Tus datos quedan guardados en este dispositivo.");

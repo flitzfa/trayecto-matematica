@@ -72,10 +72,28 @@
         return subject;
       }),
       events: [],
+      deleted: { subjects: {}, events: {} },
       generalNote: "",
       generalNoteUpdatedAt: ""
     };
   };
+
+  function normalizeTombstones(source) {
+    var result = { subjects: {}, events: {} };
+    var input = source && typeof source === "object" ? source : {};
+    ["subjects", "events"].forEach(function (kind) {
+      var entries = input[kind];
+      if (!entries || typeof entries !== "object") return;
+      Object.keys(entries).forEach(function (id) {
+        var when = String(entries[id] || "");
+        var time = Date.parse(when);
+        if (id && !isNaN(time)) result[kind][id] = new Date(time).toISOString();
+      });
+    });
+    return result;
+  }
+
+  App.normalizeTombstones = normalizeTombstones;
 
   App.normalizeState = function (candidate) {
     if (candidate && candidate.state && candidate.state.subjects) {
@@ -177,7 +195,8 @@
           time: time,
           notes: String(raw.notes || ""),
           done: !!raw.done,
-          createdAt: raw.createdAt || now
+          createdAt: raw.createdAt || now,
+          updatedAt: raw.updatedAt || ""
         };
       })
       .filter(Boolean);
@@ -198,6 +217,7 @@
       },
       subjects: subjects,
       events: events,
+      deleted: normalizeTombstones(candidate.deleted),
       generalNote: String(candidate.generalNote || ""),
       generalNoteUpdatedAt: candidate.generalNoteUpdatedAt || ""
     };

@@ -2,7 +2,7 @@
 
 Aplicación web personal para seguir el **Profesorado de Matemática** de la Escuela Normal Superior N°32 «Gral. José de San Martín». Está pensada para usarse durante toda la carrera: estado de cada materia, fechas de cursada y aprobación, correlatividades, exámenes, notas y avance general.
 
-No es un maquetado ni una landing page: todos los datos se guardan en el navegador y la app funciona sin conexión ni instalación.
+No es un maquetado ni una landing page: la app funciona sin instalación, guarda los datos en el navegador y, si se activa la cuenta, los sincroniza entre dispositivos.
 
 ## Versión online
 
@@ -14,7 +14,7 @@ La app está publicada gratis en GitHub Pages:
 
 Ese es el enlace para compartir con Josef. Se puede abrir desde cualquier navegador, en computadora o celular, y también agregar a la pantalla de inicio como si fuera una app. El QR sirve para abrirla directamente desde el teléfono.
 
-> La dirección es estable y el sitio queda publicado mientras exista el repositorio. Los datos académicos no viajan al servidor: se guardan en el navegador de cada dispositivo.
+> La dirección es estable y el sitio queda publicado mientras exista el repositorio. Sin cuenta, los datos académicos se guardan solo en el navegador; con la cuenta activada, se sincronizan de forma privada entre dispositivos.
 
 ## Cómo abrirla
 
@@ -29,7 +29,21 @@ python -m http.server 8000
 
 y entrar a `http://localhost:8000`.
 
-> Los datos se guardan en `localStorage` bajo la clave `trayecto.academico.v1`. El almacenamiento está asociado al navegador y al origen desde el que se abre la app. La versión online y el archivo local no comparten datos, y tampoco se sincronizan automáticamente entre el celular y la computadora. Si abrís el archivo desde otra ruta, otro navegador o un servidor local distinto, vas a ver un estado vacío: usá **Ajustes → Descargar copia de seguridad** antes de cambiar de entorno.
+> Los datos se guardan en `localStorage` bajo la clave `trayecto.academico.v1`. El almacenamiento está asociado al navegador y al origen desde el que se abre la app. La versión online y el archivo local no comparten datos por sí solos: para eso está la cuenta, que sincroniza el mismo seguimiento en todos los dispositivos donde se inicie sesión. Si abrís el archivo desde otra ruta, otro navegador o un servidor local distinto, podés entrar con tu cuenta y recuperar tus datos, o usar **Ajustes → Descargar copia de seguridad** antes de cambiar de entorno.
+
+## Cuenta y sincronización
+
+La cuenta es **opcional**. Sin ella la app funciona igual que siempre y guarda todo en el navegador. Al crearla, el seguimiento se guarda también en la nube y aparece en cualquier dispositivo donde se inicie sesión.
+
+- Se entra desde el botón **Activar sync** de la barra superior o desde **Ajustes → Tu cuenta**.
+- Hay una sola cuenta por instalación. Se crea una vez con un **código de invitación** y queda reservada para Josef.
+- El usuario y la contraseña son personales; la contraseña se guarda cifrada (scrypt) y la sesión dura 180 días.
+- Si se olvida la contraseña, se puede recuperar con el mismo código de invitación.
+- Los cambios se suben solos unos segundos después de editar. Al abrir la app, al volver a la pestaña y cada 45 segundos se buscan cambios de otros dispositivos.
+- Si dos dispositivos editan a la vez, se combinan materia por materia y evento por evento, conservando la versión más reciente de cada cosa, incluidas las eliminaciones.
+- Se puede cerrar sesión en un dispositivo sin borrar los datos locales.
+
+El servicio de sincronización es un proyecto gratuito de Vercel (`trayecto-sync`) con almacenamiento privado en Vercel Blob. El código está en `trayecto-sync/api/auth.js` y `trayecto-sync/api/sync.js`.
 
 ## Qué incluye
 
@@ -39,6 +53,7 @@ y entrar a `http://localhost:8000`.
 - **Correlatividades**: se muestran las cuatro categorías del plan (cursar regular, cursar con promoción, rendir final regular y rendir final con promoción), con indicación de si la materia está habilitada.
 - **Calendario**: parciales, finales, trabajos prácticos y otros eventos, con vista mensual, agenda y vínculo opcional a una materia.
 - **Notas**: libreta general y observaciones por materia, con búsqueda.
+- **Cuenta**: creación con código de invitación, inicio de sesión, recuperación y cambio de contraseña, con sincronización automática entre dispositivos.
 - **Ajustes**: datos del perfil, año de inicio, materias personalizadas, copia de seguridad JSON, importación, exportación a calendario (`.ics`) y restauración del plan oficial.
 
 ## Estados
@@ -107,6 +122,7 @@ assets/js/app-notes.js      Notas
 assets/js/app-settings.js   Ajustes e información del plan
 assets/js/app-subject-dialog.js  Editor de materias
 assets/js/app-event-dialog.js    Editor de eventos
+assets/js/app-sync.js       Cuenta, sesión y sincronización
 assets/js/app-actions.js    Ruteo, eventos, filtros e import/export
 ```
 
@@ -114,4 +130,6 @@ Es HTML, CSS y JavaScript sin build ni dependencias externas. Los scripts son cl
 
 ## Privacidad
 
-Todo queda en tu navegador. La app no envía datos a ningún servidor ni incluye analíticas.
+Sin cuenta, todo queda en el navegador: la app no envía datos a ningún servidor ni incluye analíticas.
+
+Con la cuenta activada, el perfil, las materias, las fechas y las notas se envían al servicio de sincronización (`trayecto-sync.vercel.app`) para poder mostrarlos en tus otros dispositivos. Ese almacenamiento es privado: solo se accede con la sesión de la cuenta, que se guarda en el navegador. No hay terceros, publicidad ni analíticas, y se puede dejar de sincronizar cerrando sesión o borrando los datos desde Ajustes.

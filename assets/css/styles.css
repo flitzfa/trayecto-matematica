@@ -676,6 +676,312 @@ legend {
   transform: scale(1.04);
 }
 
+/* Cuenta y sincronización */
+.sync-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 34px;
+  padding: 0 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink-soft);
+  background: rgba(255, 253, 247, 0.7);
+  font-size: 9.5px;
+  font-weight: 650;
+  white-space: nowrap;
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+
+.sync-button:hover {
+  border-color: var(--line-strong);
+  background: var(--surface);
+}
+
+.sync-button .icon {
+  width: 14px;
+  height: 14px;
+  color: var(--muted);
+}
+
+.sync-dot {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  border-radius: 50%;
+  background: var(--muted-soft);
+  box-shadow: 0 0 0 3px rgba(145, 150, 140, 0.12);
+}
+
+.sync-button.is-synced .sync-dot {
+  background: var(--green);
+  box-shadow: 0 0 0 3px rgba(47, 110, 81, 0.14);
+}
+
+.sync-button.is-synced .icon {
+  color: var(--green);
+}
+
+.sync-button.is-saving .sync-dot {
+  background: var(--coral);
+  box-shadow: 0 0 0 3px rgba(231, 111, 81, 0.14);
+  animation: sync-pulse 1.4s ease-in-out infinite;
+}
+
+.sync-button.is-error .sync-dot {
+  background: #b4462f;
+  box-shadow: 0 0 0 3px rgba(180, 70, 47, 0.14);
+}
+
+@keyframes sync-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.8);
+  }
+}
+
+.sync-lead {
+  margin-bottom: 15px;
+  color: var(--muted);
+  font-size: 10.5px;
+  line-height: 1.55;
+}
+
+.sync-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 3px;
+  margin-bottom: 15px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--surface-soft);
+}
+
+.sync-tabs button {
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 6px;
+  color: var(--muted);
+  background: transparent;
+  font-size: 9.5px;
+  font-weight: 650;
+}
+
+.sync-tabs button.is-active {
+  color: var(--ink);
+  background: var(--surface);
+  box-shadow: 0 1px 3px rgba(23, 63, 56, 0.12);
+}
+
+#syncAuthForm {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+#syncChangeForm {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.button--full {
+  width: 100%;
+  justify-content: center;
+}
+
+.sync-forgot {
+  display: block;
+  margin: 13px auto 0;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.form-error {
+  padding: 9px 11px;
+  border: 1px solid rgba(180, 70, 47, 0.22);
+  border-radius: 7px;
+  color: #963f2d;
+  background: #fbebe6;
+  font-size: 9.5px;
+  line-height: 1.45;
+}
+
+.sync-account-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 14px;
+}
+
+.account-avatar {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  border-radius: 50%;
+  color: var(--green);
+  background: var(--green-soft);
+}
+
+.account-avatar--large {
+  width: 46px;
+  height: 46px;
+  flex-basis: 46px;
+}
+
+.account-avatar .icon {
+  width: 18px;
+  height: 18px;
+}
+
+.sync-account-head strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 21px;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.sync-account-copy {
+  color: var(--muted);
+  font-size: 10.5px;
+  line-height: 1.55;
+}
+
+.account-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  color: var(--muted);
+  background: var(--surface-soft);
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  letter-spacing: 0.02em;
+}
+
+.account-badge.is-synced {
+  color: var(--green);
+  background: var(--green-soft);
+}
+
+.account-badge.is-saving {
+  color: var(--coral-deep);
+  background: var(--coral-soft);
+}
+
+.account-badge.is-error {
+  color: #963f2d;
+  background: #fbebe6;
+}
+
+.sync-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.sync-meta span {
+  color: var(--muted-soft);
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.sync-meta strong {
+  color: var(--ink-soft);
+  font-size: 9.5px;
+  font-weight: 650;
+}
+
+.account-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  margin-top: 15px;
+}
+
+.account-logout {
+  color: var(--coral-deep);
+}
+
+.sync-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.account-benefits {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.account-benefits span {
+  padding: 11px 12px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  color: var(--muted);
+  background: var(--surface-soft);
+  font-size: 8.5px;
+  line-height: 1.45;
+}
+
+.account-benefits strong {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--ink-soft);
+  font-size: 9.5px;
+}
+
+.account-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-soft);
+}
+
+.account-identity strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.account-card {
+  border-color: rgba(23, 63, 56, 0.2);
+}
+
+.account-footnote {
+  margin-top: 11px;
+  color: var(--muted-soft);
+  font-size: 8.5px;
+  line-height: 1.45;
+}
+
 .content {
   flex: 1;
   width: 100%;
@@ -4368,6 +4674,32 @@ legend {
     display: none;
   }
 
+  .sync-button {
+    width: 34px;
+    padding: 0;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .sync-dot,
+  .sync-label {
+    display: none;
+  }
+
+  .sync-button .icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .sync-button.is-error .icon {
+    color: #b4462f;
+  }
+
+  .sync-button.is-saving .icon {
+    color: var(--coral);
+    animation: sync-pulse 1.4s ease-in-out infinite;
+  }
+
   .page-heading h1 {
     font-size: 26px;
   }
@@ -4776,6 +5108,35 @@ legend {
 
   .year-row-label strong {
     font-size: 18px;
+  }
+
+  .account-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .account-actions .button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .account-benefits {
+    grid-template-columns: 1fr;
+  }
+
+  .sync-form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .sync-form-actions .button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .sync-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
   }
 }
 

@@ -85,6 +85,7 @@
     event.time = App.$("#eventTime").value;
     event.notes = App.$("#eventNotes").value;
     event.done = App.$("#eventDone").checked;
+    event.updatedAt = new Date().toISOString();
 
     App.closeDialog(App.$("#eventDialog"));
     if (App.ui.route === "calendario") {
@@ -120,6 +121,8 @@
       App.state.events = App.state.events.filter(function (item) {
         return item.id !== event.id;
       });
+      App.state.deleted = App.normalizeTombstones(App.state.deleted);
+      App.state.deleted.events[event.id] = new Date().toISOString();
       App.closeDialog(App.$("#eventDialog"));
       App.persistState();
       App.renderShell();

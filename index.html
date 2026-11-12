@@ -108,6 +108,11 @@
         </div>
         <div class="topbar-right">
           <span class="today-label" id="todayLabel"></span>
+          <button class="sync-button is-off" id="syncButton" type="button" data-action="open-sync" aria-label="Cuenta y sincronización">
+            <span class="sync-dot" aria-hidden="true"></span>
+            <svg class="icon icon--tiny" aria-hidden="true"><use href="#icon-cloud"></use></svg>
+            <span class="sync-label" id="syncLabel">Activar sync</span>
+          </button>
           <button class="button button--primary button--compact" type="button" data-action="new-event">
             <svg class="icon icon--small" aria-hidden="true"><use href="#icon-plus"></use></svg>
             <span>Nuevo evento</span>
@@ -369,6 +374,93 @@
     </footer>
   </dialog>
 
+  <!-- Cuenta y sincronización -->
+  <dialog class="modal modal--small" id="syncDialog" aria-labelledby="syncDialogTitle">
+    <div class="modal-header">
+      <div>
+        <span class="modal-kicker" id="syncDialogKicker">Trayecto en todos lados</span>
+        <h2 class="modal-title" id="syncDialogTitle">Entrar a tu cuenta</h2>
+      </div>
+      <button class="icon-button" type="button" data-close-dialog="syncDialog" aria-label="Cerrar">
+        <svg class="icon" aria-hidden="true"><use href="#icon-close"></use></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div id="syncLoggedOut">
+        <p class="sync-lead">Una sola cuenta para tener las mismas materias, fechas y notas en el celular y en la compu.</p>
+        <div class="sync-tabs" id="syncTabs" role="tablist" aria-label="Acceso a la cuenta">
+          <button class="is-active" id="syncLoginTab" type="button" data-sync-mode="login" role="tab">Entrar</button>
+          <button id="syncRegisterTab" type="button" data-sync-mode="register" role="tab">Crear cuenta</button>
+        </div>
+        <form id="syncAuthForm" novalidate>
+          <div class="field">
+            <label for="syncUsername">Usuario</label>
+            <input class="input" id="syncUsername" name="username" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="24" placeholder="Ej. josef" required>
+          </div>
+          <div class="field" id="syncPasswordField">
+            <label for="syncPassword">Contraseña</label>
+            <input class="input" id="syncPassword" name="password" type="password" autocomplete="current-password" minlength="8" placeholder="Tu contraseña" required>
+          </div>
+          <div class="field" id="syncNewPasswordField" hidden>
+            <label for="syncNewPassword">Contraseña nueva</label>
+            <input class="input" id="syncNewPassword" name="newPassword" type="password" autocomplete="new-password" minlength="8" placeholder="Al menos 8 caracteres">
+          </div>
+          <div class="field" id="syncSetupField" hidden>
+            <label for="syncSetupCode">Código de invitación</label>
+            <input class="input" id="syncSetupCode" name="setupCode" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="JOSEF-XXXX-XXXX">
+            <span class="field-hint">Es el código que te pasaron para crear la cuenta.</span>
+          </div>
+          <p class="form-error" id="syncError" hidden></p>
+          <button class="button button--primary button--full" id="syncSubmit" type="submit">Entrar</button>
+        </form>
+        <button class="text-button sync-forgot" id="syncForgot" type="button">Olvidé mi contraseña</button>
+      </div>
+
+      <div id="syncLoggedIn" hidden>
+        <div class="sync-account-head">
+          <span class="account-avatar account-avatar--large">
+            <svg class="icon" aria-hidden="true"><use href="#icon-cloud"></use></svg>
+          </span>
+          <div>
+            <strong id="syncAccountName">@josef</strong>
+            <span class="account-badge is-synced" id="syncAccountStatus">Sincronizado</span>
+          </div>
+        </div>
+        <p class="sync-account-copy">Tus materias, fechas y notas se guardan en tu cuenta. Al entrar desde otro dispositivo, aparecen automáticamente.</p>
+        <div class="sync-meta"><span>Última sincronización</span><strong id="syncLastTime">—</strong></div>
+        <div class="account-actions">
+          <button class="button button--primary button--compact" id="syncNowButton" type="button" data-action="sync-now">
+            <svg class="icon icon--small" aria-hidden="true"><use href="#icon-refresh"></use></svg>
+            Sincronizar ahora
+          </button>
+          <button class="button button--secondary button--compact" id="syncPasswordToggle" type="button" data-action="sync-password">Cambiar contraseña</button>
+          <button class="button button--ghost button--compact account-logout" type="button" data-action="sync-logout">Cerrar sesión</button>
+        </div>
+        <form id="syncChangeForm" hidden>
+          <div class="field">
+            <label for="syncCurrentPassword">Contraseña actual</label>
+            <input class="input" id="syncCurrentPassword" type="password" autocomplete="current-password" required>
+          </div>
+          <div class="field">
+            <label for="syncNewPasswordChange">Contraseña nueva</label>
+            <input class="input" id="syncNewPasswordChange" type="password" autocomplete="new-password" minlength="8" required>
+          </div>
+          <p class="form-error" id="syncErrorLogged" hidden></p>
+          <div class="sync-form-actions">
+            <button class="button button--ghost button--compact" type="button" data-action="sync-password-cancel">Cancelar</button>
+            <button class="button button--primary button--compact" id="syncChangeSubmit" type="submit">Guardar contraseña</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <footer class="modal-footer">
+      <span class="modal-footer-note">Sincronización privada con tu cuenta.</span>
+      <div class="modal-footer-actions">
+        <button class="button button--secondary button--compact" type="button" data-close-dialog="syncDialog">Listo</button>
+      </div>
+    </footer>
+  </dialog>
+
   <!-- Confirmation -->
   <dialog class="modal modal--small" id="confirmDialog" aria-labelledby="confirmTitle">
     <div class="modal-header">
@@ -491,6 +583,9 @@
       <path d="M20 6v5h-5M4 18v-5h5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
       <path d="M18.2 15.2A7.5 7.5 0 0 1 5.5 8M5.8 8.8A7.5 7.5 0 0 1 18.5 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
     </symbol>
+    <symbol id="icon-cloud" viewBox="0 0 24 24">
+      <path d="M7.2 19h9.6a4.2 4.2 0 0 0 .6-8.36A5.8 5.8 0 0 0 6.3 9.2 4 4 0 0 0 7.2 19Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+    </symbol>
   </svg>
 
   <script src="assets/js/plan-data.js"></script>
@@ -504,6 +599,7 @@
   <script src="assets/js/app-settings.js"></script>
   <script src="assets/js/app-subject-dialog.js"></script>
   <script src="assets/js/app-event-dialog.js"></script>
+  <script src="assets/js/app-sync.js"></script>
   <script src="assets/js/app-actions.js"></script>
 </body>
 </html>

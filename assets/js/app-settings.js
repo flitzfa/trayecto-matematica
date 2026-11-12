@@ -82,8 +82,11 @@
     root.innerHTML =
       '<div class="settings-layout">' +
       '<div class="settings-column">' +
+      '<div id="accountSettings">' +
+      (App.renderAccountSettings ? App.renderAccountSettings() : "") +
+      "</div>" +
       '<section class="card settings-card">' +
-      '<div class="settings-card-header"><span class="section-kicker section-kicker--coral">Identidad</span><h2>Tu perfil</h2><p>Estos datos personalizan el panel y el saludo. Se guardan únicamente en este navegador.</p></div>' +
+      '<div class="settings-card-header"><span class="section-kicker section-kicker--coral">Identidad</span><h2>Tu perfil</h2><p>Estos datos personalizan el panel y el saludo. Se guardan en este navegador y, si activás tu cuenta, también en tu cuenta.</p></div>' +
       '<form id="profileForm">' +
       '<div class="profile-form-grid">' +
       '<div class="field field--full"><label for="profileName">Nombre y apellido</label><input class="input" id="profileName" name="name" type="text" autocomplete="name" maxlength="80" value="' +
@@ -163,7 +166,7 @@
       "<li>El porcentaje se calcula sobre espacios <strong>aprobados</strong>.</li>" +
       "<li>“Regular” significa cursada aprobada con final pendiente.</li>" +
       "<li>Las correlatividades se muestran según el plan oficial y podés editarlas.</li>" +
-      "<li>Los datos viven en el almacenamiento local de este navegador. No se envían a ningún servidor.</li>" +
+      "<li>Sin cuenta, los datos viven solo en este navegador. Con tu cuenta, se sincronizan de forma privada entre tus dispositivos.</li>" +
       "</ul>" +
       '<p class="field-hint" style="margin-top:12px">Bitácora general: ' +
       generalNoteWords +

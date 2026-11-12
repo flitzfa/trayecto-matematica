@@ -342,6 +342,27 @@
         App.renderPlanInfo();
         App.showDialog(App.$("#planInfoDialog"));
         break;
+      case "open-sync":
+        App.openSyncDialog();
+        break;
+      case "open-sync-login":
+        App.openSyncDialog("login");
+        break;
+      case "open-sync-register":
+        App.openSyncDialog("register");
+        break;
+      case "sync-now":
+        App.sync.now({ silent: false, announce: true });
+        break;
+      case "sync-logout":
+        App.syncLogout();
+        break;
+      case "sync-password":
+        App.syncPassword();
+        break;
+      case "sync-password-cancel":
+        App.cancelSyncPassword();
+        break;
       case "go-settings":
         go("ajustes");
         break;

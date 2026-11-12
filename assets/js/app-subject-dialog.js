@@ -409,20 +409,30 @@
       danger: true
     }).then(function (confirmed) {
       if (!confirmed) return;
+      var stamp = new Date().toISOString();
       App.state.subjects = App.state.subjects.filter(function (item) {
         return item.id !== subject.id;
       });
+      App.state.deleted = App.normalizeTombstones(App.state.deleted);
+      App.state.deleted.subjects[subject.id] = stamp;
       App.state.subjects.forEach(function (item) {
+        var touched = false;
         App.CORR_GROUPS.forEach(function (group) {
           var rule = item.correlations[group.key];
           if (!rule) return;
+          var before = rule.subjects.length;
           rule.subjects = rule.subjects.filter(function (number) {
             return Number(number) !== Number(subject.number);
           });
+          if (rule.subjects.length !== before) touched = true;
         });
+        if (touched) item.updatedAt = stamp;
       });
       App.state.events.forEach(function (event) {
-        if (event.subjectId === subject.id) event.subjectId = null;
+        if (event.subjectId === subject.id) {
+          event.subjectId = null;
+          event.updatedAt = stamp;
+        }
       });
       App.closeDialog(App.$("#subjectDialog"));
       App.currentSubjectId = null;
